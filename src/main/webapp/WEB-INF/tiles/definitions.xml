@@ -1,0 +1,93 @@
+<!DOCTYPE tiles-definitions PUBLIC
+"-//ApacheSoftwareFoundation//DTDTilesConfiguration2.1//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<definition name="page" template="/WEB-INF/views/page.jsp">
+		<put-attribute name="body" value="" />
+		<put-attribute name="head" value="" />
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/footer.jsp" />
+	</definition>
+
+	<definition name="error/404" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/error/404/body.jsp" />
+		<put-attribute name="title" value="title.error.404" />
+	</definition>
+	
+	<definition name="index" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/index/body.jsp" />
+		<put-attribute name="title" value="title.index" />
+	</definition>
+	
+	<definition name="chord/popup" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/chord/popup/body.jsp" />
+		<put-attribute name="header" value="" />
+		<put-attribute name="footer" value="" />
+		<put-attribute name="title" value="title.chord.popup" />
+	</definition>
+	
+	<definition name="chord/view" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/chord/view/body.jsp" />
+		<!-- <put-attribute name="header" value="" /> -->
+		<put-attribute name="title" value="title.chord.view" />
+	</definition>
+	
+	<definition name="chord/edit" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/chord/edit/body.jsp" />
+		<put-attribute name="head" value="/WEB-INF/views/chord/edit/head.jsp" />
+		<put-attribute name="title" value="title.chord.edit" />
+	</definition>
+	
+	<definition name="chord/upload" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/chord/upload/body.jsp" />
+		<put-attribute name="title" value="title.chord.upload" />
+	</definition>
+
+	<definition name="chord/list" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/chord/list/body.jsp" />
+		<put-attribute name="title" value="title.chord.list" />
+	</definition>
+	
+	<definition name="song/edit" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/song/edit/body.jsp" />
+		<put-attribute name="head" value="/WEB-INF/views/song/edit/head.jsp" />
+		<put-attribute name="title" value="title.song.edit" />
+	</definition>
+
+	<definition name="song/view" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/song/view/body.jsp" />
+		<put-attribute name="head" value="/WEB-INF/views/song/view/head.jsp" />
+		<put-attribute name="title" value="title.song.view" />
+	</definition>
+
+	<definition name="song/list" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/song/list/body.jsp" />
+		<put-attribute name="head" value="/WEB-INF/views/song/list/head.jsp" />
+		<put-attribute name="title" value="title.song.list" />
+	</definition>
+
+	<definition name="storage" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/storage/body.jsp" />
+		<put-attribute name="title" value="title.storage" />
+	</definition>
+
+	<definition name="user/register" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/user/register/body.jsp" />
+		<put-attribute name="title" value="title.user.register" />
+	</definition>
+
+	<definition name="user/login" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/user/login/body.jsp" />
+		<put-attribute name="title" value="title.user.login" />
+	</definition>
+	
+	<definition name="user/register/confirmation" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/user/register/confirmation/body.jsp" />
+		<put-attribute name="title" value="title.user.register.confirmation" />
+	</definition>
+
+	<definition name="head.chord.popup" template="/WEB-INF/views/song/head_chord_popup.jsp"/>
+
+	<definition name="chord.notes" template="/WEB-INF/views/chord/chord_notes.jsp"/>
+</tiles-definitions>

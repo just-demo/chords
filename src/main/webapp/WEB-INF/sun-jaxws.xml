@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
+    <endpoint
+            name="song"
+            implementation="edu.self.soap.SongServiceImpl"
+            url-pattern="/soap/song">
+        <!--
+        <handler-chain>
+            <handler-chain-name>blablabla</handler-chain-name>
+            <handler>
+                <handler-name>loggingHandler</handler-name>
+                <handler-class>edu.self.soap.log.SOAPLoggingHandler</handler-class>
+            </handler>
+        </handler-chain>
+        -->
+    </endpoint>
+</endpoints>

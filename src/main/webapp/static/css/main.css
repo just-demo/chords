@@ -1,0 +1,82 @@
+.songTitle {
+	cursor: pointer;
+	padding: 5px;
+}
+
+.songTitle:hover, .newSong:hover {
+	background-color: #DDDDDD;
+}
+
+.chord{
+	cursor: pointer;
+	color: blue;
+}
+
+.song {
+	border: 1px solid #AAAAAA;
+}
+
+.songText {
+	border: 1px solid #AAAAAA;
+	display: inline-block;
+	font-family: monospace;
+	line-height: 17px;
+	padding: 5px;
+}
+
+.songChords, .songText {
+	vertical-align: top;
+}
+
+.songName {
+	color: blue;
+}
+
+.songContent {
+	display: none;
+}
+
+.songChords td {
+	font-family: monospace;
+	vertical-align: top;
+	text-align: center;
+}
+
+.chord_popup{
+	border: 1px solid #AAAAAA;
+	padding: 5px;
+	background-color: #FFFFFF;
+	font-family: monospace;
+}
+
+@media screen{
+	.print {
+		display: none;
+	}
+}
+
+@media print{
+	.noPrint {
+		display: none;
+	}
+}
+
+.newSong {
+	display: block;
+	position:fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 100;
+	font-weight: bold;
+	font-size: 40px;
+	color: #AAAAAA;
+	border: 5px solid #AAAAAA;
+	background-color: #F0F0F0;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	vertical-align: center;
+	border-radius: 10px;
+	cursor: pointer;
+	text-decoration: none;
+}
