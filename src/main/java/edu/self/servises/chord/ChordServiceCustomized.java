@@ -29,7 +29,8 @@ public class ChordServiceCustomized extends ChordServiceImpl {
 	 * principal.getName()
 	 */
 	private String getUserChord(String chordName) {
-		if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+		// TODO: fix security
+		if (false && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
 			// anonymousUser is returned for not logged in users
 			String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 			// the same as ...getName()

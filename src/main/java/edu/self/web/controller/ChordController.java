@@ -14,8 +14,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -144,15 +142,9 @@ public class ChordController {
 
 	private void sortChordVariants(List<Integer[]> chordVariants, final Integer[] defaultChord) {
 		if (defaultChord != null) {
-			Integer[] defaultChordActual = (Integer[])CollectionUtils.find(chordVariants, new Predicate() {
-				@Override
-				public boolean evaluate(Object chord) {
-					return Arrays.equals((Integer[])chord, defaultChord);
-				}
-			});
-			if (defaultChordActual != null){
-				Collections.swap(chordVariants, chordVariants.indexOf(defaultChordActual), 0);
-			}
+			chordVariants.stream().filter(chord -> Arrays.equals(chord, defaultChord)).findFirst().ifPresent(
+					chord -> Collections.swap(chordVariants, chordVariants.indexOf(chord), 0)
+			);
 		}
 	}
 

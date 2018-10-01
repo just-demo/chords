@@ -28,24 +28,6 @@ public class Chord {
 		this.name = composeName(note, type);
 	}
 	
-	/*
-	@Override
-	public boolean equals(Object chord){
-		if (chord == null){
-			return false;
-		}
-		if (!(chord instanceof Chord)){
-			return false;
-		}
-		return name.equals(((Chord) chord).name);
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-	*/
-	
 	public Chord getNext(int transposition){
 		return getChord(note.getNext(transposition), type);
 	}

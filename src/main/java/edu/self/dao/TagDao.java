@@ -1,15 +1,17 @@
 package edu.self.dao;
 
+import edu.self.model.Tag;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import edu.self.model.Tag;
-
 public interface TagDao {
-	Tag getTagById(Integer id);
-	Tag getTagByName(String name);
-	List<Tag> getTags();
-	Set<Tag> prepareTags(Collection<Tag> tags);
-	Tag prepareTag(String name);
+    Tag getTagByName(String name);
+
+    List<Tag> getTags();
+
+    Set<Tag> prepareTags(Collection<Tag> tags);
+
+    Tag prepareTag(String name);
 }

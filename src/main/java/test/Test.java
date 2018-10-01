@@ -1,6 +1,5 @@
 package test;
 
-import com.sun.xml.ws.transport.http.servlet.WSServletContextListener;
 import edu.self.converters.SongXmlConverter;
 import edu.self.model.Performer;
 import edu.self.model.Song;
@@ -12,7 +11,6 @@ import edu.self.servises.chord.Sorter;
 import edu.self.servises.chord.filter.ClosedStringsUpFilter;
 import edu.self.servises.chord.filter.MaxWidthFilter;
 import edu.self.servises.chord.filter.NaturalFilter;
-import edu.self.soap.SongService;
 import edu.self.types.Chord;
 import edu.self.types.Note;
 import org.w3c.dom.Document;
@@ -20,49 +18,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.ws.Service;
 import java.io.File;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
     private String s = "AAA";
-
-    void go(int ouch) {
-
-    }
-
-    public static void main(String[] args) {
-        int x = 0;
-        System.out.println((x++ + x--) - (x-- + x++));
-    }
-
-    static void doStuff(Object... z) {
-
-    }
-
-    public static void main5(String[] args) throws MalformedURLException {
-        URL url = new URL("http://localhost:8080/m/soap/song?wsdl");
-
-        //1st argument service URI, refer to wsdl document above
-        //2nd argument is service name, refer to wsdl document above
-        QName qname = new QName("http://soap.self.edu/", "SongServiceImplService");
-
-        Service service = Service.create(url, qname);
-
-        SongService song = service.getPort(SongService.class);
-
-        System.out.println(song.parseSimple("aaaa", "GGG"));
-        //JAXRPCContextListener sdfsdf;
-        WSServletContextListener dsdfdsf;
-    }
 
     void test() {
         System.out.println(s);

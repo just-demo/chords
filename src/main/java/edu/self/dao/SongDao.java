@@ -7,20 +7,15 @@ import edu.self.model.SongSummary;
 import edu.self.model.User;
 
 public interface SongDao {
-	public void deleteSong(Song song);
-	public void addSong(Song song);
-	public Song getSongById(Integer id);
-	public void saveSong(Song song);
-	public List<Song> getSongs();
-	public int getSongsCount();
-	public List<Song> getSongs(int from, int count);
-	public void setSongs(List<Song> songs);
-	public List<SongSummary> getSongSummaries();
+	void deleteSong(Song song);
+	Song getSongById(Integer id);
+	void saveSong(Song song);
+	List<Song> getSongs();
+	int getSongsCount();
+	List<Song> getSongs(int from, int count);
+	void setSongs(List<Song> songs);
 	//TODO: combine the methods into one search method
-	public List<Song> getSongsByPerformer(String performer);
-	public List<Song> getSongsByTag(String tagName);
-	public List<SongSummary> getSongSummariesByPerformer(String performer);
-	public List<SongSummary> getSongSummariesByTag(String tag);
-	public List<SongSummary> searchSongs(String songName, String performerName);
-	public List<Song> searchSongs(String text);
+	List<Song> getSongsByPerformer(String performer);
+	List<Song> getSongsByTag(String tagName);
+	List<Song> searchSongs(String text);
 }

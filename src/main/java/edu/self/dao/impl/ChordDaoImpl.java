@@ -4,14 +4,17 @@ import javax.inject.Inject;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import edu.self.dao.ChordDao;
 import edu.self.dao.UserDao;
 import edu.self.model.Chord;
 import edu.self.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Repository
+@Transactional
 public class ChordDaoImpl implements ChordDao {
 	@Inject
 	private SessionFactory sessionFactory;
@@ -53,9 +56,9 @@ public class ChordDaoImpl implements ChordDao {
 		chord.setFrets(frets);
 
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
+		//session.beginTransaction();
 		session.saveOrUpdate(chord);
-		session.getTransaction().commit();
+		//session.getTransaction().commit();
 	}
 
 	public SessionFactory getSessionFactory() {
