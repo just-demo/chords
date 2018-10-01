@@ -1,5 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/tags/music.tld" prefix="m"%>
+<%@ taglib uri="/WEB-INF/music.tld" prefix="m"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <table class="chordList">
 	<c:forEach items="${chords}" var="chordsOfNote">
@@ -10,7 +10,6 @@
 					<c:url value="/chord/view" var="url_to_chord">
 						<c:param name="name" value="${chord.key}" />
 					</c:url>
-					<a href="${url_to_chord}">${m:fretsToString(chord.value)}</a>
 				</td>
 				<td class="delimiter"> </td>
 			</c:forEach>
