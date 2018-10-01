@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.*;
 
+import static java.util.Collections.emptySet;
+
 @Repository
 @Transactional
 public class TagDaoImpl implements TagDao {
@@ -47,6 +49,9 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Set<Tag> prepareTags(Collection<Tag> tags) {
+        if (tags == null) {
+            return emptySet();
+        }
         //TODO: change this method
         Map<String, Tag> preparedTags = new HashMap<String, Tag>();
         Set<Tag> tagSet = new HashSet<Tag>();
