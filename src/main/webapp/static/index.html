@@ -4,20 +4,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
 <title>Songs</title>
 <link rel="stylesheet" type="text/css" href="css/main.css" />
-<script type="text/javascript" src="js/lib/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="js/lib/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="js/lib/easyTooltip.js"></script>
 <script type="text/javascript" src="js/lib/autoresize.jquery.js"></script>
-<script type="text/javascript" src="js/guitar.chordDiagram.js"></script>
-<script type="text/javascript" src="js/guitar.load.js"></script>
-<script type="text/javascript" src="js/guitar.xml.parseChords.js"></script>
-<script type="text/javascript" src="js/guitar.xml.parseSongs.js"></script>
+<script type="text/javascript" src="js/buildChordDiagram.js"></script>
+<script type="text/javascript" src="js/loadXML.js"></script>
+<script type="text/javascript" src="js/parseChordsXML.js"></script>
+<script type="text/javascript" src="js/parseSongsXML.js"></script>
 <script type="text/javascript" src="js/songLists.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function(){
 	$("body").songLists(
-		$.guitar.xml.parseChords($.guitar.load("data/chords.xml")),
-		$.guitar.xml.parseSongs($.guitar.load("data/songs.xml"))
+		parseChordsXML(loadXML("data/chords.xml")),
+		parseSongsXML(loadXML("data/songs.xml"))
 	);
 
 	$("body").append("<a class='newSong' href='index.html' target='_blank'>+</a>");

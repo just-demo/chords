@@ -51,7 +51,7 @@
 		$(".chord").easyTooltip({
 			content: function(){
 				var chordName = $.trim($(this).html());
-				var chordDiagram = chordName in chords ? $.guitar.chordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
+				var chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
 				return "<div class='chord_popup'>" + chordDiagram + "</div>";
 			}
 		});
@@ -102,7 +102,7 @@
 					var k = i * columns + j;
 					if (songChords[k]){
 						buffer.push("<div class='chordName'>", songChords[k], ":</div>");
-						buffer.push(songChords[k] in chords ? $.guitar.chordDiagram(chords[songChords[k]].frets) : "Unknown<br/>chord");
+						buffer.push(songChords[k] in chords ? buildChordDiagram(chords[songChords[k]].frets) : "Unknown<br/>chord");
 					}
 					buffer.push("</td>");
 				}
