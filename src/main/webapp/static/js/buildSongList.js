@@ -1,11 +1,10 @@
-(function($) {
-	$.fn.songLists = function(chords, songs){
-	    chords = convertChords(chords);
+function buildSongList(container, songs, chords){
 	    songs = sortSongs(songs);
+	    chords = convertChords(chords);
 
 		for (var i = -1; i < songs.length; ++i){
 			var song = songs[i] || {"performer": "new", "name": "new", "text": "<textarea>put here song text...</textarea>"};
-			$(this).append([
+			$(container).append([
 				"<div class='song noPrint'>",
 					"<div class='songTitle'>",
 						"<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
@@ -149,5 +148,4 @@
 				.replace(/\s/g, "&nbsp;")
 				.replace(/\{([^}]+)\}/g, "<span class='chord'>$1</span>");
 		}
-	}
-})(jQuery);
+}
