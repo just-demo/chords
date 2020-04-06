@@ -1,5 +1,8 @@
 (function($) {
 	$.fn.songLists = function(chords, songs){
+	    chords = convertChords(chords);
+	    songs = sortSongs(songs);
+
 		for (var i = -1; i < songs.length; ++i){
 			var song = songs[i] || {"performer": "new", "name": "new", "text": "<textarea>put here song text...</textarea>"};
 			$(this).append([
@@ -72,6 +75,31 @@
 		$(".printAction").click(function(){
 			window.print();
 		});
+
+		function convertChords(chords) {
+		    var chordMap = {};
+            chords.forEach(chord => {
+                chordMap[chord.name] = {...chord};
+            });
+
+
+            for (var currentName in chordMap) {
+                var nextName = chordMap[currentName].next;
+                if (nextName in chordMap) {
+                    chordMap[currentName].next = chordMap[nextName];
+                    chordMap[nextName].prev = chordMap[currentName];
+                } else {
+                    chordMap[currentName].next = null;
+                }
+            }
+            return chordMap;
+		}
+
+		function sortSongs(songs) {
+		    songs = [...songs];
+		    songs.sort((a, b) => a.performer < b.performer ? -1 : (a.performer > b.performer ? 1 : 0));
+            return songs;
+		}
 		
 		function findParentSong(element) {
 			//return $(element).parent().parent();
@@ -84,11 +112,9 @@
 		
 		function refreshChordDiagrams(songElement){
 			var songTextElement = $(".songText", songElement);
-			var songChords = [];
-			$(".chord", songTextElement).each(function(index){
-				songChords.push($(this).html());
-			});
-			songChords = unique(songChords);
+			var songChords = distinct($(".chord", songTextElement)
+			    .toArray()
+			    .map(chord => $(chord).html()));
 
 			var buffer = [];
 			var columns = 3;
@@ -112,16 +138,10 @@
 			$(".songChords", songElement).html(buffer.join(""));
 		}
 
-		function unique(array){
-			return $.grep(array, function(value, index){
-				return index == $.inArray(value, array);
-			});
+		function distinct(array){
+			return Array.from(new Set(array))
 		}
-			
-		function getKeys(map) {
-			var keys = [];
-		}
-		
+
 		function songToHTML(text){
 			return text
 				.replace(new RegExp("(^|\\s|\\()(" + Object.keys(chords).join("|") + ")(?=\\s|\\)|$)", "g"), "$1{$2}")

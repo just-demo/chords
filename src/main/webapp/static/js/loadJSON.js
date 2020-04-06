@@ -1,10 +1,10 @@
-function loadXML(dataUrl){
+function loadJSON(dataUrl){
     var result;
     $.ajax({
         async: false,
         type: "GET",
         url: dataUrl,
-        dataType: "html",
+        dataType: "json",
         success: (data) => {
             result = data;
         }
