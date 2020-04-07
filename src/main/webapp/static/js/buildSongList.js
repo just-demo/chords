@@ -1,3 +1,5 @@
+// TODO: hover on chord name on the right side should show all chord variants
+// TODO: create selection checkbox
 function buildSongList(container, songs, chords){
     songs = convertSongs(songs);
     chords = convertChords(chords);
@@ -39,11 +41,16 @@ function buildSongList(container, songs, chords){
         let $song = findParentSong(this);
         let $songView = $(".songText", $song);
         let $songEdit = $(this);
-        setViewText($songView, $("textarea", $songEdit).val());
+        let performer = $(".songPerformer", $song).html();
+        let name = $(".songName", $song).html();
+        let text = $("textarea", $songEdit).val()
+        setViewText($songView, text);
         $songEdit.hide();
         $songView.show();
         $("button").removeAttr("disabled");
         refreshChordDiagrams($song);
+        // TODO: create Save button instead and enable/disable based on current <> persisted
+        saveSongText(performer, name, text);
     });
 
     $(".stanspose").click(function(){
@@ -167,7 +174,11 @@ function buildSongList(container, songs, chords){
     }
 
     function loadSongText(performer, name) {
-        return loadText(`data/songs/${performer}/${name}.txt`);
+        return httpReadText(`data/songs/${performer}/${name}.txt`);
+    }
+    
+    function saveSongText(performer, name, text) {
+        return httpWriteText(`data/songs/${performer}/${name}.txt`, text);
     }
 
     function findParentSong(element) {

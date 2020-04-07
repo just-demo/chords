@@ -9,13 +9,13 @@
     <script type="text/javascript" src="js/lib/autoresize.jquery.js"></script>
     <script type="text/javascript" src="js/buildChordDiagram.js"></script>
     <script type="text/javascript" src="js/buildSongList.js"></script>
-    <script type="text/javascript" src="js/load.js"></script>
+    <script type="text/javascript" src="js/http.js"></script>
     <script type="text/javascript">
         $(document).ready(() => {
             buildSongList(
                 $("body"),
-                loadJson("data/songs.json"),
-                loadJson("data/chords.json")
+                httpReadJson("data/songs.json"),
+                httpReadJson("data/chords.json")
             );
         });
     </script>
