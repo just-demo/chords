@@ -1,194 +1,226 @@
 function buildSongList(container, songs, chords){
-	    songs = sortSongs(songs);
-	    chords = convertChords(chords);
-        songs.forEach(song => $(container).append(buildSongView(song)));
-        $(container).append("<div class='newSong noPrint'>+</div>");
+    songs = convertSongs(songs);
+    chords = convertChords(chords);
+    songs.forEach(song => $(container).append(buildSongView(song)));
+    $(container).append("<div class='newSong noPrint'>+</div>");
 
-		$(".songTitle").click(function(){
-			var songElement = findParentSong(this); //$(this).parent().parent();
-			var songContentElement = $(".songContent", songElement);
-			var isVisible = songContentElement.is(":visible");
-			$(".songContent").hide('fast');
-			$(".song").addClass("noPrint");
-			if (!isVisible){
-				songContentElement.show('fast', songContentElement[0].scrollIntoView);
-				refreshChordDiagrams(songElement);
-				songElement.removeClass("noPrint");
-			}
-		});
-
-		$(".songText").dblclick(function(){
-		    var $song = findParentSong(this);
-            var $songView = $(this);
-            var $songEdit = $(".songEdit", $song);
-            var $textarea = $("<textarea>").css({
-                "width": $songView.outerWidth() + 10,
-                "height": $songView.outerHeight() + 20
-            }).val(songHtmlToText($songView.html()));
-            $songEdit.html("").append($textarea);
-            $songView.hide();
-            $songEdit.show();
-            $("button").attr("disabled", true);
-		});
-
-        $(".songEdit").dblclick(function(){
-            var $song = findParentSong(this);
-            var $songView = $(".songText", $song);
-            var $songEdit = $(this);
-            setViewText($songView, $("textarea", $songEdit).val());
-            $songEdit.hide();
-            $songView.show();
-            $("button").removeAttr("disabled");
+    $(".songTitle").click(function(){
+        let $song = findParentSong(this);
+        let $songContent = $(".songContent", $song);
+        let isVisible = $songContent.is(":visible");
+        $(".songContent").hide('fast');
+        $(".song").addClass("noPrint");
+        if (!isVisible){
+            let performer = $(".songPerformer", $song).html();
+            let name = $(".songName", $song).html();
+            let text = loadSongText(performer, name);
+            setViewText($(".songText", $song), text);
+            $songContent.show('fast', $songContent[0].scrollIntoView);
             refreshChordDiagrams($song);
+            $song.removeClass("noPrint");
+        }
+    });
+
+    $(".songText").dblclick(function(){
+        let $song = findParentSong(this);
+        let $songView = $(this);
+        let $songEdit = $(".songEdit", $song);
+        let $textarea = $("<textarea>").css({
+            "width": $songView.outerWidth() + 10,
+            "height": $songView.outerHeight() + 20
+        }).val(songHtmlToText($songView.html()));
+        $songEdit.html("").append($textarea);
+        $songView.hide();
+        $songEdit.show();
+        $("button").attr("disabled", true);
+    });
+
+    $(".songEdit").dblclick(function(){
+        let $song = findParentSong(this);
+        let $songView = $(".songText", $song);
+        let $songEdit = $(this);
+        setViewText($songView, $("textarea", $songEdit).val());
+        $songEdit.hide();
+        $songView.show();
+        $("button").removeAttr("disabled");
+        refreshChordDiagrams($song);
+    });
+
+    $(".stanspose").click(function(){
+        let $song = findParentSong(this); //$(this).parent().parent();
+        let $songText = $(".songText", $song);
+        let direction = $(this).data("step") < 0 ? "prev" : "next";
+        $(".chord", $songText).each(function(){
+            let chord = $(this).html();
+            if (chords[chord] && chords[chord][direction]){
+                $(this).html(chords[chord][direction].name);
+            }
+        });
+        refreshChordDiagrams($song);
+    });
+
+    $(".printAction").click(function(){
+        window.print();
+    });
+
+    $(".newSong").click(function() {
+        $(container).append(buildSongView({
+            name: "Name...",
+            performer: "Performer...",
+            text: "Text..."
+        }));
+        // TODO: bind click and others or make them live!
+    });
+
+    function buildSongView(song) {
+        let $song = $([
+            "<div class='song noPrint'>",
+                "<div class='songTitle'>",
+                    "<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
+                "</div>",
+                "<div class='songContent'>",
+                    "<table>",
+                        "<tr class='songActions noPrint'>",
+                            "<td colspan='3'>",
+                                "<button type='button' class='stanspose' data-step='-1'>-</button>",
+                                "<button type='button' class='stanspose' data-step='1'>+</button>",
+                                "<button type='button' class='printAction'>Print</button>",
+                            "</td>",
+                        "</tr>",
+                        "<tr>",
+                            "<td class='songText'>",
+                            "</td>",
+                            "<td class='songEdit'>",
+                            "</td>",
+                            "<td class='songChords'>",
+                            "</td>",
+                        "</tr>",
+                    "</table>",
+                "</div>",
+            "</div>"
+        ].join(""));
+        return $song;
+    }
+
+    function setViewText($songView, text) {
+        $songView
+            .html(songTextToHTML(text))
+            .find(".chord").easyTooltip({
+                content: function(){
+                    let chordName = $.trim($(this).html());
+                    let chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
+                    return "<div class='chord_popup'>" + chordDiagram + "</div>";
+                }
+            });
+    }
+
+    function convertChords(chords) {
+        let chordMap = {};
+        chords.forEach(chord => {
+            chordMap[chord.name] = {...chord};
         });
 
-		$(".stanspose").click(function(){
-			var songElement = findParentSong(this); //$(this).parent().parent();
-			var songTextElement = $(".songText", songElement);
-			var direction = $(this).data("step") < 0 ? "prev" : "next";
-			$(".chord", songTextElement).each(function(index){
-				var chord = $(this).html();
-				if (chords[chord] && chords[chord][direction]){
-					$(this).html(chords[chord][direction].name);
-				}
-			});
-			refreshChordDiagrams(songElement);
-		});
 
-		$(".printAction").click(function(){
-			window.print();
-		});
-
-		$(".newSong").click(function() {
-		    $(container).append(buildSongView({
-                name: "Name...",
-                performer: "Performer...",
-                text: "Text..."
-            }));
-            // TODO: bind click and others or make them live!
-		});
-
-		function buildSongView(song) {
-		    var $song = $([
-                "<div class='song noPrint'>",
-                    "<div class='songTitle'>",
-                        "<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
-                    "</div>",
-                    "<div class='songContent'>",
-                        "<table>",
-                            "<tr class='songActions noPrint'>",
-                                "<td colspan='3'>",
-                                    "<button type='button' class='stanspose' data-step='-1'>-</button>",
-                                    "<button type='button' class='stanspose' data-step='1'>+</button>",
-                                    "<button type='button' class='printAction'>Print</button>",
-                                "</td>",
-                            "</tr>",
-                            "<tr>",
-                                "<td class='songText'>",
-                                "</td>",
-                                "<td class='songEdit'>",
-                                "</td>",
-                                "<td class='songChords'>",
-                                "</td>",
-                            "</tr>",
-                        "</table>",
-                    "</div>",
-                "</div>"
-            ].join(""));
-            setViewText($(".songText", $song), song.text);
-            return $song;
-		}
-
-        function setViewText($songView, text) {
-            $songView
-                .html(songTextToHTML(text))
-                .find(".chord").easyTooltip({
-                    content: function(){
-                        var chordName = $.trim($(this).html());
-                        var chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
-                        return "<div class='chord_popup'>" + chordDiagram + "</div>";
-                    }
-                });
-        }
-
-		function convertChords(chords) {
-		    var chordMap = {};
-            chords.forEach(chord => {
-                chordMap[chord.name] = {...chord};
-            });
-
-
-            for (var currentName in chordMap) {
-                var nextName = chordMap[currentName].next;
-                if (nextName in chordMap) {
-                    chordMap[currentName].next = chordMap[nextName];
-                    chordMap[nextName].prev = chordMap[currentName];
-                } else {
-                    chordMap[currentName].next = null;
-                }
+        for (let currentName in chordMap) {
+            let nextName = chordMap[currentName].next;
+            if (nextName in chordMap) {
+                chordMap[currentName].next = chordMap[nextName];
+                chordMap[nextName].prev = chordMap[currentName];
+            } else {
+                chordMap[currentName].next = null;
             }
-            return chordMap;
-		}
-
-		function sortSongs(songs) {
-		    songs = [...songs];
-		    songs.sort((a, b) => a.performer < b.performer ? -1 : (a.performer > b.performer ? 1 : 0));
-            return songs;
-		}
-		
-		function findParentSong(element) {
-			//return $(element).parent().parent();
-			element = $(element);
-			while (!element.hasClass("song")){
-				element = element.parent();
-			}
-			return element;
-		}
-		
-		function refreshChordDiagrams(songElement){
-			var songTextElement = $(".songText", songElement);
-			var songChords = distinct($(".chord", songTextElement)
-			    .toArray()
-			    .map(chord => $(chord).html()));
-
-			var buffer = [];
-			var columns = 3;
-			var rows = Math.ceil(songChords.length / columns);
-			
-			buffer.push("<table>");
-			for (var i = 0; i < rows; ++i) {
-				buffer.push("<tr>");
-				for (var j = 0; j < columns; ++j) {
-					buffer.push("<td>");
-					var k = i * columns + j;
-					if (songChords[k]){
-						buffer.push("<div class='chordName'>", songChords[k], ":</div>");
-						buffer.push(songChords[k] in chords ? buildChordDiagram(chords[songChords[k]].frets) : "Unknown<br/>chord");
-					}
-					buffer.push("</td>");
-				}
-				buffer.push("</tr>\n");
-			}
-			buffer.push("</table>");
-			$(".songChords", songElement).html(buffer.join(""));
-		}
-
-		function distinct(array){
-			return Array.from(new Set(array))
-		}
-
-		function songTextToHTML(text){
-			return text
-				.replace(new RegExp("(^|\\s|\\()(" + Object.keys(chords).join("|") + ")(?=\\s|\\)|$)", "g"), "$1{$2}")
-				.replace(/\n/g, "<br/>")
-				.replace(/\s/g, "&nbsp;")
-				.replace(/\{([^}]+)\}/g, "<span class='chord'>$1</span>");
-		}
-
-        function songHtmlToText(html){
-            return html
-                .replace(new RegExp("<br.*?>", "g"), "\n")
-                .replace(new RegExp("&nbsp;", "g"), " ")
-                .replace(/<span.*?>(.+?)<\/span>/g, "{$1}");
         }
+        return chordMap;
+    }
+
+    function convertSongs(songMap) {
+        let songList = [];
+        for (let [performer, songs] of Object.entries(songMap)) {
+            for (let name of Object.keys(songs)) {
+                songList.push({
+                    performer: performer,
+                    name: name
+                });
+            }
+        }
+        songList.sort((s1, s2) => compare(s1, s2,
+            // selected songs go first
+            s => songs[s.performer][s.name],
+            s => s.performer,
+            s => s.name
+        ));
+        return songList;
+    }
+
+    function compare(o1, o2, ...mappers) {
+        mappers = mappers.length ? mappers : [o => o];
+        for (let mapper of mappers) {
+            let v1 = mapper(o1);
+            let v2 = mapper(o2);
+            let diff = v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+            if (diff) {
+                return diff;
+            }
+        }
+        return 0;
+    }
+
+    function loadSongText(performer, name) {
+        return loadText(`data/songs/${performer}/${name}.txt`);
+    }
+
+    function findParentSong(element) {
+        let $element = $(element);
+        while (!$element.hasClass("song")){
+            $element = $element.parent();
+        }
+        return $element;
+    }
+
+    function refreshChordDiagrams($song){
+        let $songText = $(".songText", $song);
+        let songChords = distinct($(".chord", $songText)
+            .toArray()
+            .map(chord => $(chord).html()));
+
+        let buffer = [];
+        let columns = 3;
+        let rows = Math.ceil(songChords.length / columns);
+
+        buffer.push("<table>");
+        for (let i = 0; i < rows; ++i) {
+            buffer.push("<tr>");
+            for (let j = 0; j < columns; ++j) {
+                buffer.push("<td>");
+                let k = i * columns + j;
+                if (songChords[k]){
+                    buffer.push("<div class='chordName'>", songChords[k], ":</div>");
+                    buffer.push(songChords[k] in chords ? buildChordDiagram(chords[songChords[k]].frets) : "Unknown<br/>chord");
+                }
+                buffer.push("</td>");
+            }
+            buffer.push("</tr>\n");
+        }
+        buffer.push("</table>");
+        $(".songChords", $song).html(buffer.join(""));
+    }
+
+    function distinct(array){
+        return Array.from(new Set(array))
+    }
+
+    function songTextToHTML(text){
+        return text
+            .replace(new RegExp("(^|\\s|\\()(" + Object.keys(chords).join("|") + ")(?=\\s|\\)|$)", "g"), "$1{$2}")
+            .replace(/\n/g, "<br/>")
+            .replace(/\s/g, "&nbsp;")
+            .replace(/\{([^}]+)\}/g, "<span class='chord'>$1</span>");
+    }
+
+    function songHtmlToText(html){
+        return html
+            .replace(new RegExp("<br.*?>", "g"), "\n")
+            .replace(new RegExp("&nbsp;", "g"), " ")
+            .replace(/<span.*?>(.+?)<\/span>/g, "{$1}");
+    }
 }
