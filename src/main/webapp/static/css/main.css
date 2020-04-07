@@ -3,8 +3,12 @@
 	padding: 5px;
 }
 
+.songTitle.selected {
+	background-color: #AFA;
+}
+
 .songTitle:hover, .newSong:hover {
-	background-color: #DDDDDD;
+	background-color: #DDD;
 }
 
 .chord{
@@ -13,11 +17,11 @@
 }
 
 .song {
-	border: 1px solid #AAAAAA;
+	border: 1px solid #AAA;
 }
 
 .songText {
-	border: 1px solid #AAAAAA;
+	border: 1px solid #AAA;
 	display: inline-block;
 }
 
@@ -59,9 +63,9 @@
 }
 
 .chord_popup{
-	border: 1px solid #AAAAAA;
+	border: 1px solid #AAA;
 	padding: 5px;
-	background-color: #FFFFFF;
+	background-color: #FFF;
 	font-family: monospace;
 }
 
@@ -85,7 +89,7 @@
 	font-weight: bold;
 	font-size: 40px;
 	color: #AAAAAA;
-	border: 5px solid #AAAAAA;
+	border: 3px solid #AAA;
 	background-color: #F0F0F0;
 	width: 50px;
 	height: 50px;

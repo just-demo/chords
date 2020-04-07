@@ -75,7 +75,7 @@ function buildSongList(container, songs, chords){
     function buildSongView(song) {
         let $song = $([
             "<div class='song noPrint'>",
-                "<div class='songTitle'>",
+                "<div class='songTitle ", song.selected ? "selected" : "", "'>",
                     "<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
                 "</div>",
                 "<div class='songContent'>",
@@ -136,16 +136,17 @@ function buildSongList(container, songs, chords){
     function convertSongs(songMap) {
         let songList = [];
         for (let [performer, songs] of Object.entries(songMap)) {
-            for (let name of Object.keys(songs)) {
+            for (let [name, selected] of Object.entries(songs)) {
                 songList.push({
                     performer: performer,
-                    name: name
+                    name: name,
+                    selected: selected
                 });
             }
         }
         songList.sort((s1, s2) => compare(s1, s2,
             // selected songs go first
-            s => songs[s.performer][s.name],
+            s => !s.selected,
             s => s.performer,
             s => s.name
         ));
