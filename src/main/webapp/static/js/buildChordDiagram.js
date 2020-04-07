@@ -22,7 +22,7 @@ function buildChordDiagram(frets){
 
     //expand min/max to -1/+1
     min = Math.max(0, min - 1);
-    max = Math.max(max + 1, min + 5 - (min > 0 ? 1 : 0));
+    max = Math.max(max, min + 5 - (min > 0 ? 1 : 0));
 
     var buffer = [];
     buffer.push("<table border='0' cellpadding='0' cellspacing='0'>");

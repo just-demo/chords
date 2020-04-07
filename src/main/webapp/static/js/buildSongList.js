@@ -1,41 +1,8 @@
 function buildSongList(container, songs, chords){
 	    songs = sortSongs(songs);
 	    chords = convertChords(chords);
-
-		for (var i = -1; i < songs.length; ++i){
-			var song = songs[i] || {"performer": "new", "name": "new", "text": "<textarea>put here song text...</textarea>"};
-			$(container).append([
-				"<div class='song noPrint'>",
-					"<div class='songTitle'>",
-						"<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
-					"</div>",
-					"<div class='songContent'>",
-						"<table>",
-							"<tr class='songActions noPrint'>",
-								"<td colspan='2'>",
-									"<button type='button' class='stanspose' data-step='-1'>-</button>",
-									"<button type='button' class='stanspose' data-step='1'>+</button>",
-								"</td>",
-							"</tr>",
-							"<tr>",
-								"<td class='songText'>",
-									songToHTML(song.text),
-								"</td>",
-								"<td class='songChords'>",
-								"</td>",
-							"</tr>",
-							"<tr class='songActions noPrint'>",
-								"<td colspan='2'>",
-									"<button type='button' class='printAction'>Print</button>",
-								"</td>",
-							"</tr>",
-						"</table>",
-					"</div>",
-				"</div>"
-			].join(""));
-		}
-		
-		//$("textarea").autoResize({limit:10000}).change();
+        songs.forEach(song => $(container).append(buildSongView(song)));
+        $(container).append("<div class='newSong noPrint'>+</div>");
 
 		$(".songTitle").click(function(){
 			var songElement = findParentSong(this); //$(this).parent().parent();
@@ -50,14 +17,31 @@ function buildSongList(container, songs, chords){
 			}
 		});
 
-		$(".chord").easyTooltip({
-			content: function(){
-				var chordName = $.trim($(this).html());
-				var chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
-				return "<div class='chord_popup'>" + chordDiagram + "</div>";
-			}
+		$(".songText").dblclick(function(){
+		    var $song = findParentSong(this);
+            var $songView = $(this);
+            var $songEdit = $(".songEdit", $song);
+            var $textarea = $("<textarea>").css({
+                "width": $songView.outerWidth() + 10,
+                "height": $songView.outerHeight() + 20
+            }).val(songHtmlToText($songView.html()));
+            $songEdit.html("").append($textarea);
+            $songView.hide();
+            $songEdit.show();
+            $("button").attr("disabled", true);
 		});
-			
+
+        $(".songEdit").dblclick(function(){
+            var $song = findParentSong(this);
+            var $songView = $(".songText", $song);
+            var $songEdit = $(this);
+            setViewText($songView, $("textarea", $songEdit).val());
+            $songEdit.hide();
+            $songView.show();
+            $("button").removeAttr("disabled");
+            refreshChordDiagrams($song);
+        });
+
 		$(".stanspose").click(function(){
 			var songElement = findParentSong(this); //$(this).parent().parent();
 			var songTextElement = $(".songText", songElement);
@@ -74,6 +58,58 @@ function buildSongList(container, songs, chords){
 		$(".printAction").click(function(){
 			window.print();
 		});
+
+		$(".newSong").click(function() {
+		    $(container).append(buildSongView({
+                name: "Name...",
+                performer: "Performer...",
+                text: "Text..."
+            }));
+            // TODO: bind click and others or make them live!
+		});
+
+		function buildSongView(song) {
+		    var $song = $([
+                "<div class='song noPrint'>",
+                    "<div class='songTitle'>",
+                        "<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
+                    "</div>",
+                    "<div class='songContent'>",
+                        "<table>",
+                            "<tr class='songActions noPrint'>",
+                                "<td colspan='3'>",
+                                    "<button type='button' class='stanspose' data-step='-1'>-</button>",
+                                    "<button type='button' class='stanspose' data-step='1'>+</button>",
+                                    "<button type='button' class='printAction'>Print</button>",
+                                "</td>",
+                            "</tr>",
+                            "<tr>",
+                                "<td class='songText'>",
+                                "</td>",
+                                "<td class='songEdit'>",
+                                "</td>",
+                                "<td class='songChords'>",
+                                "</td>",
+                            "</tr>",
+                        "</table>",
+                    "</div>",
+                "</div>"
+            ].join(""));
+            setViewText($(".songText", $song), song.text);
+            return $song;
+		}
+
+        function setViewText($songView, text) {
+            $songView
+                .html(songTextToHTML(text))
+                .find(".chord").easyTooltip({
+                    content: function(){
+                        var chordName = $.trim($(this).html());
+                        var chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
+                        return "<div class='chord_popup'>" + chordDiagram + "</div>";
+                    }
+                });
+        }
 
 		function convertChords(chords) {
 		    var chordMap = {};
@@ -141,11 +177,18 @@ function buildSongList(container, songs, chords){
 			return Array.from(new Set(array))
 		}
 
-		function songToHTML(text){
+		function songTextToHTML(text){
 			return text
 				.replace(new RegExp("(^|\\s|\\()(" + Object.keys(chords).join("|") + ")(?=\\s|\\)|$)", "g"), "$1{$2}")
 				.replace(/\n/g, "<br/>")
 				.replace(/\s/g, "&nbsp;")
 				.replace(/\{([^}]+)\}/g, "<span class='chord'>$1</span>");
 		}
+
+        function songHtmlToText(html){
+            return html
+                .replace(new RegExp("<br.*?>", "g"), "\n")
+                .replace(new RegExp("&nbsp;", "g"), " ")
+                .replace(/<span.*?>(.+?)<\/span>/g, "{$1}");
+        }
 }

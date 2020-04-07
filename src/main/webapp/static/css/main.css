@@ -19,9 +19,25 @@
 .songText {
 	border: 1px solid #AAAAAA;
 	display: inline-block;
+}
+
+.songText, textarea {
 	font-family: monospace;
+	font-size: 12px;
 	line-height: 17px;
 	padding: 5px;
+}
+
+.songActions td {
+    display: flex;
+}
+
+.stanspose {
+    margin-right: 3px;
+}
+
+.printAction {
+    margin-left: auto;
 }
 
 .songChords, .songText {
