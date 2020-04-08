@@ -4,6 +4,7 @@ from pathlib import Path
 from os.path import isfile, dirname
 import re
 import json
+import os
 
 def save_selection(artist, song, selected):
     file = 'data/songs.json'
@@ -12,6 +13,15 @@ def save_selection(artist, song, selected):
         songs[artist] = {}
     if song not in songs[artist] or songs[artist][song] != selected:
         songs[artist][song] = selected
+        write_json_file(file, songs)
+
+def delete_song_reference(artist, song):
+    file = 'data/songs.json'
+    songs = read_json_file(file)
+    if artist in songs and song in songs[artist]:
+        del songs[artist][song]
+        if not any(songs[artist]):
+            del songs[artist]
         write_json_file(file, songs)
 
 def parse_url_path(path):
@@ -24,6 +34,13 @@ def write_file(file, content):
     Path(dirname(file)).mkdir(parents=True, exist_ok=True)
     with open(file, "w+") as f:
         f.write(content)
+
+def delete_file(file):
+    os.remove(file)
+    dir = dirname(file)
+    while not os.listdir(dir):
+        os.rmdir(dir)
+        dir = dirname(dir)
 
 def read_json_file(file):
     with open(file) as f:
@@ -48,6 +65,14 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         if content:
             write_file(file, content)
         self.send_response(200)
+        self.end_headers()
+    def do_DELETE(self):
+        url = urlparse(self.path)
+        (artist, song) = parse_url_path(unquote(url.path))
+        delete_song_reference(artist, song)
+        file = build_fs_path(artist, song)
+        delete_file(file)
+        self.send_response(204)
         self.end_headers()
 
 httpd = HTTPServer(('localhost', 8888), MyHTTPRequestHandler)

@@ -12,10 +12,11 @@
     <script type="text/javascript" src="js/http.js"></script>
     <script type="text/javascript">
         $(document).ready(() => {
+            let timestamp = new Date().getTime();
             buildSongList(
                 $("body"),
-                httpReadJson("data/songs.json"),
-                httpReadJson("data/chords.json")
+                httpReadJson("data/songs.json?nocache=" + timestamp),
+                httpReadJson("data/chords.json?nocache=" + timestamp)
             );
         });
     </script>

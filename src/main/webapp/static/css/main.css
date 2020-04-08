@@ -36,11 +36,11 @@
     display: flex;
 }
 
-.stanspose {
+.stanspose, .delete {
     margin-right: 3px;
 }
 
-.printAction {
+.right {
     margin-left: auto;
 }
 

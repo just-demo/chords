@@ -1,5 +1,6 @@
 // TODO: hover on chord name on the right side should show all chord variants
 // TODO: create selection checkbox
+// TODO: create Delete button
 function buildSongList(container, songs, chords){
     songs = convertSongs(songs);
     chords = convertChords(chords);
@@ -13,12 +14,15 @@ function buildSongList(container, songs, chords){
         $(".songContent").hide('fast');
         $(".song").addClass("noPrint");
         if (!isVisible){
-            let performer = $(".songPerformer", $song).html();
-            let name = $(".songName", $song).html();
-            let text = loadSongText(performer, name);
-            setViewText($(".songText", $song), text);
+            if (!$song.data("initialized")) {
+                let performer = $(".songPerformer", $song).html();
+                let name = $(".songName", $song).html();
+                let text = httpReadText(songPath(performer, name));
+                setViewText($(".songText", $song), text);
+                refreshChordDiagrams($song);
+                $song.data("initialized", true);
+            }
             $songContent.show('fast', $songContent[0].scrollIntoView);
-            refreshChordDiagrams($song);
             $song.removeClass("noPrint");
         }
     });
@@ -50,11 +54,11 @@ function buildSongList(container, songs, chords){
         $("button").removeAttr("disabled");
         refreshChordDiagrams($song);
         // TODO: create Save button instead and enable/disable based on current <> persisted
-        saveSongText(performer, name, text);
+        httpWriteText(songPath(performer, name), text);
     });
 
     $(".stanspose").click(function(){
-        let $song = findParentSong(this); //$(this).parent().parent();
+        let $song = findParentSong(this);
         let $songText = $(".songText", $song);
         let direction = $(this).data("step") < 0 ? "prev" : "next";
         $(".chord", $songText).each(function(){
@@ -64,6 +68,16 @@ function buildSongList(container, songs, chords){
             }
         });
         refreshChordDiagrams($song);
+    });
+
+    $(".delete").click(function(){
+        if (window.confirm("Delete the song?")) {
+            let $song = findParentSong(this);
+            let performer = $(".songPerformer", $song).html();
+            let name = $(".songName", $song).html();
+            $song.remove();
+            httpDelete(songPath(performer, name));
+        }
     });
 
     $(".printAction").click(function(){
@@ -83,7 +97,9 @@ function buildSongList(container, songs, chords){
         let $song = $([
             "<div class='song noPrint'>",
                 "<div class='songTitle ", song.selected ? "selected" : "", "'>",
-                    "<span class='songPerformer'>", song.performer, "</span>", " - ", "<span class='songName'>", song.name, "</span>",
+                    "<span class='songPerformer'>", song.performer, "</span>",
+                    " - ",
+                    "<span class='songName'>", song.name, "</span>",
                 "</div>",
                 "<div class='songContent'>",
                     "<table>",
@@ -91,16 +107,14 @@ function buildSongList(container, songs, chords){
                             "<td colspan='3'>",
                                 "<button type='button' class='stanspose' data-step='-1'>-</button>",
                                 "<button type='button' class='stanspose' data-step='1'>+</button>",
+                                "<button type='button' class='delete right'>Delete</button>",
                                 "<button type='button' class='printAction'>Print</button>",
                             "</td>",
                         "</tr>",
                         "<tr>",
-                            "<td class='songText'>",
-                            "</td>",
-                            "<td class='songEdit'>",
-                            "</td>",
-                            "<td class='songChords'>",
-                            "</td>",
+                            "<td class='songText'></td>",
+                            "<td class='songEdit'></td>",
+                            "<td class='songChords'></td>",
                         "</tr>",
                     "</table>",
                 "</div>",
@@ -173,12 +187,8 @@ function buildSongList(container, songs, chords){
         return 0;
     }
 
-    function loadSongText(performer, name) {
-        return httpReadText(`data/songs/${performer}/${name}.txt`);
-    }
-    
-    function saveSongText(performer, name, text) {
-        return httpWriteText(`data/songs/${performer}/${name}.txt`, text);
+    function songPath(performer, name) {
+        return `data/songs/${performer}/${name}.txt`;
     }
 
     function findParentSong(element) {

@@ -9,9 +9,9 @@ function httpReadText(url){
 function httpRead(url, dataType){
     let result;
     $.ajax({
-        async: false,
-        type: "GET",
         url: url,
+        type: "GET",
+        async: false,
         dataType: dataType,
         success: (data) => {
             result = data;
@@ -22,10 +22,18 @@ function httpRead(url, dataType){
 
 function httpWriteText(url, text){
     $.ajax({
-        async: false,
-        type: "POST",
         url: url,
+        type: "POST",
+        async: false,
         dataType: 'text',
         data: text
+    });
+}
+
+function httpDelete(url){
+    $.ajax({
+        url: url,
+        type: "DELETE",
+        async: false
     });
 }
