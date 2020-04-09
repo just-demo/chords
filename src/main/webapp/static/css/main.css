@@ -33,6 +33,10 @@
 	padding: 5px;
 }
 
+textarea {
+    background-color: #F0F0F0;
+}
+
 .songActions td {
     display: flex;
 }

@@ -28,6 +28,18 @@ function buildSongList(container, songs, chords){
         }
     });
 
+    $(".songTitle").mousedown(function(event){
+        // middle click
+        if (event.which == 2) {
+            let $song = findParentSong(this);
+            let $songTitle = $(".songTitle", $song);
+            $songTitle.toggleClass("selected");
+            let performer = $(".songPerformer", $song).html();
+            let name = $(".songName", $song).html();
+            httpWriteText(songPath(performer, name) + "?selected=" + $songTitle.hasClass("selected"), "");
+        }
+    });
+
     $(".songText").dblclick(function(){
         let $song = findParentSong(this);
         let $songView = $(this);
@@ -39,7 +51,7 @@ function buildSongList(container, songs, chords){
         $songEdit.html("").append($textarea);
         $songView.hide();
         $songEdit.show();
-        $("button").attr("disabled", true);
+        $("button", $song).attr("disabled", true);
     });
 
     $(".songEdit").dblclick(function(){
