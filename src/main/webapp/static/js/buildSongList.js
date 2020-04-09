@@ -1,6 +1,4 @@
 // TODO: hover on chord name on the right side should show all chord variants
-// TODO: create selection checkbox
-// TODO: create Delete button
 function buildSongList(container, songs, chords){
     songs = convertSongs(songs);
     chords = convertChords(chords);
