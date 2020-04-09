@@ -20,6 +20,7 @@ function buildSongList(container, songs, chords){
                 let text = httpReadText(songPath(performer, name));
                 setViewText($(".songText", $song), text);
                 refreshChordDiagrams($song);
+                $song.data("saved", text);
                 $song.data("initialized", true);
             }
             $songContent.show('fast', $songContent[0].scrollIntoView);
@@ -51,13 +52,12 @@ function buildSongList(container, songs, chords){
         setViewText($songView, text);
         $songEdit.hide();
         $songView.show();
-        $("button").removeAttr("disabled");
+        $("button", $song).removeAttr("disabled");
         refreshChordDiagrams($song);
-        // TODO: create Save button instead and enable/disable based on current <> persisted
-        httpWriteText(songPath(performer, name), text);
+        refreshModified($song);
     });
 
-    $(".stanspose").click(function(){
+    $(".transpose").click(function(){
         let $song = findParentSong(this);
         let $songText = $(".songText", $song);
         let direction = $(this).data("step") < 0 ? "prev" : "next";
@@ -68,6 +68,28 @@ function buildSongList(container, songs, chords){
             }
         });
         refreshChordDiagrams($song);
+        refreshModified($song);
+    });
+
+    $(".revert").click(function(){
+        let $song = findParentSong(this);
+        $(".revert", $song).attr("disabled", true);
+        $(".save", $song).attr("disabled", true);
+        let $songView = $(".songText", $song);
+        setViewText($songView, $song.data("saved"));
+        refreshChordDiagrams($song);
+    });
+
+    $(".save").click(function(){
+        let $song = findParentSong(this);
+        $(".revert", $song).attr("disabled", true);
+        $(".save", $song).attr("disabled", true);
+        let $songView = $(".songText", $song);
+        let performer = $(".songPerformer", $song).html();
+        let name = $(".songName", $song).html();
+        let text = songHtmlToText($songView.html());
+        httpWriteText(songPath(performer, name), text);
+        $song.data("saved", text);
     });
 
     $(".delete").click(function(){
@@ -105,9 +127,11 @@ function buildSongList(container, songs, chords){
                     "<table>",
                         "<tr class='songActions noPrint'>",
                             "<td colspan='3'>",
-                                "<button type='button' class='stanspose' data-step='-1'>-</button>",
-                                "<button type='button' class='stanspose' data-step='1'>+</button>",
-                                "<button type='button' class='delete right'>Delete</button>",
+                                "<button type='button' class='transpose' data-step='-1'>-</button>",
+                                "<button type='button' class='transpose' data-step='1'>+</button>",
+                                "<button type='button' class='revert right' disabled>Revert</button>",
+                                "<button type='button' class='save' disabled>Save</button>",
+                                "<button type='button' class='delete'>Delete</button>",
                                 "<button type='button' class='printAction'>Print</button>",
                             "</td>",
                         "</tr>",
@@ -197,6 +221,20 @@ function buildSongList(container, songs, chords){
             $element = $element.parent();
         }
         return $element;
+    }
+
+    function refreshModified($song) {
+        let $songView = $(".songText", $song);
+        let $revert = $(".revert", $song);
+        let $save = $(".save", $song);
+        let text = songHtmlToText($songView.html());
+        if (text == $song.data("saved")) {
+            $revert.attr("disabled", true);
+            $save.attr("disabled", true);
+        } else {
+            $revert.removeAttr("disabled");
+            $save.removeAttr("disabled");
+        }
     }
 
     function refreshChordDiagrams($song){
