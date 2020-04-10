@@ -38,7 +38,7 @@ function buildSongList(container, songs, chords){
                     $song = buildSongView(song);
                     $(container).append($song);
                     $(this).dialog("close");
-                    $(".songTitle", $song).click();
+                    $(".songTitle", $song).trigger("click");
                 }
             },
             Cancel: function() {
@@ -46,6 +46,7 @@ function buildSongList(container, songs, chords){
             }
         },
         close: function() {
+            $("input", $(this)).removeClass("ui-state-error");
             $(this).find("form")[0].reset();
         }
     });
