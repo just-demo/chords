@@ -7,7 +7,7 @@
 	background-color: #AFA;
 }
 
-.songTitle:hover, .newSong:hover {
+.songTitle:hover {
 	background-color: #DDD;
 }
 
@@ -86,7 +86,7 @@ textarea {
 	}
 }
 
-.newSong {
+#newSongButton {
 	position:fixed;
 	top: 20px;
 	right: 20px;
@@ -104,3 +104,32 @@ textarea {
 	cursor: pointer;
 	text-decoration: none;
 }
+
+#newSongButton:hover {
+	background-color: #DDD;
+}
+
+
+#newSongDialog {
+    display: none;
+}
+
+/*** for jquery-ui ***/
+fieldset {
+    border:0;
+}
+
+fieldset label {
+    display:block;
+}
+
+fieldset input {
+    margin-bottom:12px;
+    width:95%;
+    padding: .4em;
+}
+
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
+/*********************/

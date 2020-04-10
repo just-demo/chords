@@ -1,11 +1,56 @@
 // TODO: hover on chord name on the right side should show all chord variants
 function buildSongList(container, songs, chords){
-    songs = convertSongs(songs);
     chords = convertChords(chords);
-    songs.forEach(song => $(container).append(buildSongView(song)));
-    $(container).append("<div class='newSong noPrint'>+</div>");
+    flattenSongs(songs).forEach(song => $(container).append(buildSongView(song)));
 
-    $(".songTitle").click(function(){
+    let dialog = $("#newSongDialog").dialog({
+        autoOpen: false,
+        width: 350,
+        height: 280,
+        modal: true,
+        buttons: {
+            Save: function() {
+                let $performer = $('input[name="performer"]', $(this));
+                let $name = $('input[name="name"]', $(this));
+                let song = {
+                    performer: $performer.val().trim(),
+                    name: $name.val().trim(),
+                    text: "..."
+                };
+                $("input", $(this)).removeClass("ui-state-error");
+                let valid = true;
+                if (!song.performer) {
+                    $performer.addClass("ui-state-error");
+                    valid = false;
+                }
+                if (!song.name) {
+                    $name.addClass("ui-state-error");
+                    valid = false;
+                }
+                if (song.performer && song.name && song.performer in songs && song.name in songs[song.performer]) {
+                    $performer.addClass("ui-state-error");
+                    $name.addClass("ui-state-error");
+                    valid = false;
+                }
+
+                if (valid) {
+                    httpWriteText(songPath(song.performer, song.name), song.text);
+                    $song = buildSongView(song);
+                    $(container).append($song);
+                    $(this).dialog("close");
+                    $(".songTitle", $song).click();
+                }
+            },
+            Cancel: function() {
+                $(this).dialog("close");
+            }
+        },
+        close: function() {
+            $(this).find("form")[0].reset();
+        }
+    });
+
+    $(document).on("click", ".songTitle", function(){
         let $song = findParentSong(this);
         let $songContent = $(".songContent", $song);
         let isVisible = $songContent.is(":visible");
@@ -26,7 +71,7 @@ function buildSongList(container, songs, chords){
         }
     });
 
-    $(".songTitle").mousedown(function(event){
+    $(document).on("mousedown", ".songTitle", function(event){
         // middle click
         if (event.which == 2) {
             let $song = findParentSong(this);
@@ -38,7 +83,7 @@ function buildSongList(container, songs, chords){
         }
     });
 
-    $(".songText").dblclick(function(){
+    $(document).on("dblclick", ".songText", function(){
         let $song = findParentSong(this);
         let $songView = $(this);
         let $songEdit = $(".songEdit", $song);
@@ -52,7 +97,7 @@ function buildSongList(container, songs, chords){
         $("button", $song).attr("disabled", true);
     });
 
-    $(".songEdit").dblclick(function(){
+    $(document).on("dblclick", ".songEdit", function(){
         let $song = findParentSong(this);
         let $songView = $(".songText", $song);
         let $songEdit = $(this);
@@ -67,7 +112,7 @@ function buildSongList(container, songs, chords){
         refreshModified($song);
     });
 
-    $(".transpose").click(function(){
+    $(document).on("click", ".transpose", function(){
         let $song = findParentSong(this);
         let $songText = $(".songText", $song);
         let direction = $(this).data("step") < 0 ? "prev" : "next";
@@ -81,7 +126,7 @@ function buildSongList(container, songs, chords){
         refreshModified($song);
     });
 
-    $(".revert").click(function(){
+    $(document).on("click", ".revert", function(){
         let $song = findParentSong(this);
         $(".revert", $song).attr("disabled", true);
         $(".save", $song).attr("disabled", true);
@@ -90,7 +135,7 @@ function buildSongList(container, songs, chords){
         refreshChordDiagrams($song);
     });
 
-    $(".save").click(function(){
+    $(document).on("click", ".save", function(){
         let $song = findParentSong(this);
         $(".revert", $song).attr("disabled", true);
         $(".save", $song).attr("disabled", true);
@@ -102,7 +147,7 @@ function buildSongList(container, songs, chords){
         $song.data("saved", text);
     });
 
-    $(".delete").click(function(){
+    $(document).on("click", ".delete", function(){
         if (window.confirm("Delete the song?")) {
             let $song = findParentSong(this);
             let performer = $(".songPerformer", $song).html();
@@ -112,17 +157,12 @@ function buildSongList(container, songs, chords){
         }
     });
 
-    $(".printAction").click(function(){
+    $(document).on("click", ".printAction", function(){
         window.print();
     });
 
-    $(".newSong").click(function() {
-        $(container).append(buildSongView({
-            name: "Name...",
-            performer: "Performer...",
-            text: "Text..."
-        }));
-        // TODO: bind click and others or make them live!
+    $(document).on("click", "#newSongButton", function(){
+        dialog.dialog("open");
     });
 
     function buildSongView(song) {
@@ -188,7 +228,7 @@ function buildSongList(container, songs, chords){
         return chordMap;
     }
 
-    function convertSongs(songMap) {
+    function flattenSongs(songMap) {
         let songList = [];
         for (let [performer, songs] of Object.entries(songMap)) {
             for (let [name, selected] of Object.entries(songs)) {

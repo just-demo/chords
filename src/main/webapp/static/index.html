@@ -3,8 +3,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1251"/>
     <title>Songs</title>
+    <link rel="stylesheet" type="text/css" href="css/lib/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <script type="text/javascript" src="js/lib/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui.js"></script>
     <script type="text/javascript" src="js/lib/easyTooltip.js"></script>
     <script type="text/javascript" src="js/lib/autoresize.jquery.js"></script>
     <script type="text/javascript" src="js/buildChordDiagram.js"></script>
@@ -22,5 +24,16 @@
     </script>
 </head>
 <body>
+    <div id="newSongButton" class="noPrint">+</div>
+    <div id="newSongDialog" title="Enter new song">
+        <form>
+            <fieldset>
+                <div>Performer</div>
+                <input type="text" name="performer">
+                <div>Title</div>
+                <input type="text" name="name">
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>
