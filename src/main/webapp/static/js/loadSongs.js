@@ -2,10 +2,10 @@ function loadSongs() {
     let songs = [];
     let performers = fetchLinks(loadHTML('data/songs/'));
     performers.forEach(performer => {
-        let songNames = fetchLinks(loadHTML('data/songs/' + performer));
-        songNames.forEach(name => songs.push({
+        let songTitles = fetchLinks(loadHTML('data/songs/' + performer));
+        songTitles.forEach(title => songs.push({
             performer: performer,
-            name: trimExtension(name)
+            title: trimExtension(title)
         }));
     });
     return songs;

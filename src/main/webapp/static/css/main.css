@@ -1,13 +1,13 @@
-.songTitle {
+.songHeader {
 	cursor: pointer;
 	padding: 5px;
 }
 
-.songTitle.selected {
+.songHeader.selected {
 	background-color: #AFA;
 }
 
-.songTitle:hover {
+.songHeader:hover {
 	background-color: #DDD;
 }
 
@@ -53,11 +53,11 @@ textarea {
 	vertical-align: top;
 }
 
-.songName {
+.songTitle {
 	color: blue;
 }
 
-.songContent {
+.songBody {
 	display: none;
 }
 
