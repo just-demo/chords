@@ -1,4 +1,3 @@
-// TODO: hover on chord name on the right side should show all chord variants
 function buildSongList(container, songs, chords){
     chords = convertChords(chords);
     flattenSongs(songs).forEach(song => $(container).append(buildSongView(song)));
@@ -207,7 +206,7 @@ function buildSongList(container, songs, chords){
             .find(".chord").easyTooltip({
                 content: function(){
                     let chordName = $.trim($(this).html());
-                    let chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets) : "Unknown<br/>chord";
+                    let chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets[0]) : "Unknown<br/>chord";
                     return "<div class='chord_popup'>" + chordDiagram + "</div>";
                 }
             });
@@ -308,15 +307,47 @@ function buildSongList(container, songs, chords){
                 buffer.push("<td>");
                 let k = i * columns + j;
                 if (songChords[k]){
-                    buffer.push("<div class='chordName'>", songChords[k], ":</div>");
-                    buffer.push(songChords[k] in chords ? buildChordDiagram(chords[songChords[k]].frets) : "Unknown<br/>chord");
+                    buffer.push("<span class='chord'>", songChords[k], "</span>");
+                    buffer.push(songChords[k] in chords ? buildChordDiagram(chords[songChords[k]].frets[0]) : "Unknown<br/>chord");
                 }
                 buffer.push("</td>");
             }
-            buffer.push("</tr>\n");
+            buffer.push("</tr>");
         }
         buffer.push("</table>");
-        $(".songChords", $song).html(buffer.join(""));
+        $(".songChords", $song)
+            .html(buffer.join(""))
+            .find(".chord").easyTooltip({
+                content: function(){
+                    let chordName = $.trim($(this).html());
+                    console.log(chordName);
+                    let chordDiagrams = chordName in chords ?
+                        chords[chordName].frets.map(buildChordDiagram).join("<br/>") :
+                        "Unknown<br/>chord";
+                    return "<div class='chord_popup'>" + chordDiagrams + "</div>";
+                }
+            });
+    }
+
+    function buildChordDiagrams2(frets) {
+        let buffer = [];
+        let columns = 2;
+        let rows = Math.ceil(frets.length / columns);
+        buffer.push("<table>");
+        for (let i = 0; i < rows; ++i) {
+            buffer.push("<tr>");
+            for (let j = 0; j < columns; ++j) {
+                buffer.push("<td>");
+                let k = i * columns + j;
+                if (frets[k]){
+                    buffer.push(buildChordDiagram(frets[k]));
+                }
+                buffer.push("</td>");
+            }
+            buffer.push("</tr>");
+        }
+        buffer.push("</table>");
+        return buffer.join("");
     }
 
     function distinct(array){
