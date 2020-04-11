@@ -116,17 +116,23 @@ textarea {
 
 /*** for jquery-ui ***/
 fieldset {
-    border:0;
+    border: 0;
 }
 
 fieldset label {
-    display:block;
+    display: block;
 }
 
 fieldset input {
-    margin-bottom:12px;
-    width:95%;
+    margin-bottom: 12px;
+    width: 95%;
     padding: .4em;
+}
+
+fieldset textarea {
+    background-color: #FFF;
+    width: 95%;
+    height: 85px;
 }
 
 .ui-dialog-titlebar-close {

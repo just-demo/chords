@@ -6,16 +6,17 @@ function buildSongList(container, songs, chords){
     let dialog = $("#newSongDialog").dialog({
         autoOpen: false,
         width: 350,
-        height: 280,
+        height: 400,
         modal: true,
         buttons: {
             Save: function() {
                 let $performer = $('input[name="performer"]', $(this));
                 let $name = $('input[name="name"]', $(this));
+                let $text = $('textarea[name="text"]', $(this));
                 let song = {
                     performer: $performer.val().trim(),
                     name: $name.val().trim(),
-                    text: "..."
+                    text: $text.val()
                 };
                 $("input", $(this)).removeClass("ui-state-error");
                 let valid = true;
@@ -25,6 +26,10 @@ function buildSongList(container, songs, chords){
                 }
                 if (!song.name) {
                     $name.addClass("ui-state-error");
+                    valid = false;
+                }
+                if (!song.text) {
+                    $text.addClass("ui-state-error");
                     valid = false;
                 }
                 if (song.performer && song.name && song.performer in songs && song.name in songs[song.performer]) {
@@ -46,7 +51,7 @@ function buildSongList(container, songs, chords){
             }
         },
         close: function() {
-            $("input", $(this)).removeClass("ui-state-error");
+            $("*", $(this)).removeClass("ui-state-error");
             $(this).find("form")[0].reset();
         }
     });
