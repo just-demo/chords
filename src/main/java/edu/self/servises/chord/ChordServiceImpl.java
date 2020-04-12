@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.self.servises.chord.sorter.SorterComplex;
 import org.springframework.stereotype.Service;
 
 import edu.self.servises.chord.filter.ClosedStringsUpFilter;
@@ -33,7 +34,7 @@ public class ChordServiceImpl implements ChordService {
 		filters.addFilter(new ClosedStringsUpFilter());
 		filters.addFilter(new NaturalFilter());
 		
-		sorter = new Sorter();
+		sorter = new SorterComplex();
 	}
 	
 	public Set<String> getChordNames(){

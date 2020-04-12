@@ -7,7 +7,7 @@ import edu.self.parser.SongParser;
 import edu.self.servises.chord.ChordServiceImpl;
 import edu.self.servises.chord.Filters;
 import edu.self.servises.chord.Generator;
-import edu.self.servises.chord.Sorter;
+import edu.self.servises.chord.sorter.SorterSimple;
 import edu.self.servises.chord.filter.ClosedStringsUpFilter;
 import edu.self.servises.chord.filter.MaxWidthFilter;
 import edu.self.servises.chord.filter.NaturalFilter;
@@ -131,7 +131,7 @@ public class Test {
         filters.addFilter(new ClosedStringsUpFilter());
         filters.addFilter(new NaturalFilter());
 
-        Sorter sorter = new Sorter();
+        SorterSimple sorter = new SorterSimple();
 
         for (String chordName : chordNames) {
             Note[] chordNotes = Chord.getChord(chordName).getNotes();
