@@ -1,33 +1,29 @@
 package edu.self.servises.chord;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class Sorter {
-	public void sort(List<Integer[]> chords){
-		List<Chord> chordsSortable = new ArrayList<Chord>();
-		for (Integer[] frets: chords){
-			chordsSortable.add(new Chord(frets));
-		}
-		Collections.sort(chordsSortable);
-		int n = chords.size();
-		for (int i = 0; i < n; ++i){
-			chords.set(i, chordsSortable.get(i).frets);
-		}
+	public List<Integer[]> sort(List<Integer[]> chords){
+	    return chords.stream()
+                .map(Chord::new)
+                .sorted()
+                .map(chord -> chord.frets)
+                .collect(toList());
 	}
-	
+
 	private class Chord implements Comparable<Chord>{
 		private double average = 0;
 		private int count = 0;
 		private Integer[] frets;
-		
+
 		@Override
 		public int compareTo(Chord chord) {
 			if (count != chord.count){
 				return count < chord.count ? 1 : -1;
 			}
-			
+
 			if (average != chord.average){
 				return average > chord.average ? 1 : -1;
 			}

@@ -45,8 +45,7 @@ public class ChordServiceImpl implements ChordService {
 		generator.setNotes(notes);
 		List<Integer[]> chords = generator.getChords();
 		chords = filters.apply(chords);
-		sorter.sort(chords);
-		return chords;
+		return sorter.sort(chords);
 	}
 
 	public Integer[] getChord(String chordName) throws UnsupportedChordException{

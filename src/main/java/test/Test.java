@@ -141,7 +141,7 @@ public class Test {
             chords = filters.apply(chords);
             System.out.println(chordName + ":" + chords.size());
 
-            sorter.sort(chords);
+            chords = sorter.sort(chords);
             /*
                for (Integer[] chord: chords){
                    System.out.println(makeString(chord));
