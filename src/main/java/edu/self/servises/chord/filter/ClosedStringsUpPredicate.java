@@ -1,10 +1,10 @@
 package edu.self.servises.chord.filter;
 
-import edu.self.servises.chord.Filter;
+import java.util.function.Predicate;
 
-public class ClosedStringsUpFilter implements Filter {
+public class ClosedStringsUpPredicate implements Predicate<Integer[]> {
 	@Override
-	public boolean accept(Integer[] frets) {
+	public boolean test(Integer[] frets) {
 		boolean hasClosed = false;
 		for (Integer fret: frets){
 			if (fret == null){

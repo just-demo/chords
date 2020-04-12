@@ -1,23 +1,23 @@
 package edu.self.servises.chord.filter;
 
-import edu.self.servises.chord.Filter;
+import java.util.function.Predicate;
 
-public class MaxWidthIgnoreZeroFilter implements Filter {
+public class MaxWidthPredicate implements Predicate<Integer[]> {
 	private int maxWidth;
-	public MaxWidthIgnoreZeroFilter(){
+	public MaxWidthPredicate(){
 		this(4);
 	}
 	
-	public MaxWidthIgnoreZeroFilter(int maxWidth){
+	public MaxWidthPredicate(int maxWidth){
 		this.maxWidth = maxWidth;
 	}
 	
 	@Override
-	public boolean accept(Integer[] frets) {
+	public boolean test(Integer[] frets) {
 		int min = Integer.MAX_VALUE;
 		int max = Integer.MIN_VALUE;
 		for (Integer fret: frets){
-			if (fret != null && fret != 0){
+			if (fret != null){
 				if (fret < min){
 					min = fret;
 				}

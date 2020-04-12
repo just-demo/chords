@@ -1,19 +1,19 @@
 package edu.self.servises.chord.filter;
 
-import edu.self.servises.chord.Filter;
+import java.util.function.Predicate;
 
-public class NaturalFilter implements Filter{
+public class NaturalPredicate implements Predicate<Integer[]> {
 	private int maxFingersCount;
-	public NaturalFilter(){
+	public NaturalPredicate(){
 		this(4);
 	}
 	
-	public NaturalFilter(int maxFingersCount){
+	public NaturalPredicate(int maxFingersCount){
 		this.maxFingersCount = maxFingersCount;
 	}
 	
 	@Override
-	public boolean accept(Integer[] frets) {
+	public boolean test(Integer[] frets) {
 		int min = Integer.MAX_VALUE;
 		for (Integer fret: frets){
 			if (fret != null && fret != 0 && fret < min){

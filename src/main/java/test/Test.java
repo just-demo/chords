@@ -5,12 +5,12 @@ import edu.self.model.Performer;
 import edu.self.model.Song;
 import edu.self.parser.SongParser;
 import edu.self.servises.chord.ChordServiceImpl;
-import edu.self.servises.chord.Filters;
+import edu.self.servises.chord.filter.Filter;
 import edu.self.servises.chord.Generator;
 import edu.self.servises.chord.sorter.SorterSimple;
-import edu.self.servises.chord.filter.ClosedStringsUpFilter;
-import edu.self.servises.chord.filter.MaxWidthFilter;
-import edu.self.servises.chord.filter.NaturalFilter;
+import edu.self.servises.chord.filter.ClosedStringsUpPredicate;
+import edu.self.servises.chord.filter.MaxWidthPredicate;
+import edu.self.servises.chord.filter.NaturalPredicate;
 import edu.self.types.Chord;
 import edu.self.types.Note;
 import org.w3c.dom.Document;
@@ -126,10 +126,10 @@ public class Test {
 
         String[] chordNames = {"Dm"}; //"C C# D D# E F F# G G# A A# B Cm C#m Dm D#m Em Fm F#m Gm G#m Am A#m Bm C7 C#7 D7 D#7 E7 F7 F#7 G7 G#7 A7 A#7 B7";
 
-        Filters filters = new Filters();
-        filters.addFilter(new MaxWidthFilter());
-        filters.addFilter(new ClosedStringsUpFilter());
-        filters.addFilter(new NaturalFilter());
+        Filter filter = new Filter(
+                new MaxWidthPredicate(),
+                new ClosedStringsUpPredicate(),
+                new NaturalPredicate());
 
         SorterSimple sorter = new SorterSimple();
 
@@ -138,7 +138,7 @@ public class Test {
             generator.setNotes(chordNotes);
             List<Integer[]> chords = generator.getChords();
             System.out.println(chordName + ":" + chords.size());
-            chords = filters.apply(chords);
+            chords = filter.apply(chords);
             System.out.println(chordName + ":" + chords.size());
 
             chords = sorter.sort(chords);

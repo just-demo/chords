@@ -1,10 +1,10 @@
 package edu.self.servises.chord.filter;
 
-import edu.self.servises.chord.Filter;
+import java.util.function.Predicate;
 
-public class ClosedStringsMixedFilter implements Filter {
+public class ClosedStringsMixedPredicate implements Predicate<Integer[]> {
 	@Override
-	public boolean accept(Integer[] frets) {
+	public boolean test(Integer[] frets) {
 		boolean hasClosedAfterOpen = false;
 		boolean hasOpen = false;
 		for (Integer fret: frets){
@@ -22,5 +22,4 @@ public class ClosedStringsMixedFilter implements Filter {
 		}
 		return true;
 	}
-
 }

@@ -61,6 +61,15 @@ function buildChordDiagram(frets){
     }
 
     function hasBar(frets){
-        return frets.every(fret => fret !== null);
+        let hasClosed = false;
+        for (let fret of frets){
+            if (fret === null){
+                hasClosed = true;
+            } else if (hasClosed){
+                // closed are allowed only on top
+                return false;
+            }
+        }
+        return true;
     }
 }

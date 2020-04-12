@@ -8,33 +8,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.self.servises.chord.filter.Filter;
 import edu.self.servises.chord.sorter.SorterComplex;
 import org.springframework.stereotype.Service;
 
-import edu.self.servises.chord.filter.ClosedStringsUpFilter;
-import edu.self.servises.chord.filter.MaxWidthFilter;
-import edu.self.servises.chord.filter.NaturalFilter;
+import edu.self.servises.chord.filter.ClosedStringsUpPredicate;
+import edu.self.servises.chord.filter.MaxWidthPredicate;
+import edu.self.servises.chord.filter.NaturalPredicate;
 import edu.self.types.Chord;
 import edu.self.types.Note;
 
 @Service
 public class ChordServiceImpl implements ChordService {
 	private Generator generator;
-	private Filters filters;
-	private Sorter sorter;
-	
 	private Note[] strings = {Note.E,Note.B,Note.G,Note.D,Note.A,Note.E};
 	
 	public ChordServiceImpl(){
 		generator = new Generator();
 		generator.setStrings(strings);
-
-		filters = new Filters();
-		filters.addFilter(new MaxWidthFilter());
-		filters.addFilter(new ClosedStringsUpFilter());
-		filters.addFilter(new NaturalFilter());
-		
-		sorter = new SorterComplex();
 	}
 	
 	public Set<String> getChordNames(){
@@ -45,7 +36,12 @@ public class ChordServiceImpl implements ChordService {
 		Note[] notes = Chord.getChord(chordName).getNotes();
 		generator.setNotes(notes);
 		List<Integer[]> chords = generator.getChords();
-		chords = filters.apply(chords);
+		Filter filter = new Filter(
+				new MaxWidthPredicate(),
+				new ClosedStringsUpPredicate(),
+				new NaturalPredicate());
+		Sorter sorter = new SorterComplex();
+		chords = filter.apply(chords);
 		return sorter.sort(chords);
 	}
 

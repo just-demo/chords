@@ -196,8 +196,8 @@ public class ChordTag extends TagSupport {
 		for (Integer fret: frets){
 			if (fret == null){
 				hasClosed = true;
-			}
-			else if (hasClosed){
+			} else if (hasClosed){
+				// closed are allowed only on top
 				return false;
 			}
 		}
