@@ -11,9 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static edu.self.utils.ChordUtils.formatFrets;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class ShowAllChords {
@@ -37,14 +36,6 @@ public class ShowAllChords {
     private static void writeFile(String file, String content) throws IOException {
         Files.createDirectories(Paths.get(file).getParent());
         FileUtils.writeStringToFile(new File(file), content, UTF_8);
-    }
-
-    private static List<String> formatFrets(List<Integer[]> fretNums) {
-        return fretNums.stream()
-                .map(frets -> stream(frets)
-                        .map(fret -> fret == null ? "x" : fret.toString())
-                        .collect(joining("-")))
-                .collect(toList());
     }
 
     private static class Chord {

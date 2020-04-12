@@ -1,7 +1,5 @@
 package edu.self.servises.chord.sorter;
 
-import edu.self.servises.chord.Sorter;
-
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;

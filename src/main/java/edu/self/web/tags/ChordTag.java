@@ -15,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import edu.self.types.GuitarString;
 
+import static edu.self.utils.ChordUtils.getBar;
+
 public class ChordTag extends TagSupport {
 	private static final long serialVersionUID = 1L;
 
@@ -117,7 +119,7 @@ public class ChordTag extends TagSupport {
 		Integer minFret = Collections.min(frets, FretComparator.MIN);
 		Integer maxFret = Collections.max(frets, FretComparator.MAX);
 		
-		Integer bar = hasBar(frets) ? minFret : null;
+		Integer bar = getBar(frets.toArray(new Integer[0]));
 		
 		minFret = ObjectUtils.defaultIfNull(minFret, 0);
 		maxFret = ObjectUtils.defaultIfNull(maxFret, 1);
@@ -141,7 +143,7 @@ public class ChordTag extends TagSupport {
         		+ (id != null ? (" id=\"" + id + "\"") : "")
         		+ (styleClass != null ? (" class=\"" + styleClass + "\"") : "")
         		+ ">");
-        if (type == "edit") {
+        if ("edit".equals(type)) {
         	buffer.append(makeBarLine(minFret, maxFret));
         }
         int string = 1;
@@ -190,20 +192,7 @@ public class ChordTag extends TagSupport {
 		}
 		return note;
 	}
-	
-	private boolean hasBar(List<Integer> frets){
-		boolean hasClosed = false;
-		for (Integer fret: frets){
-			if (fret == null){
-				hasClosed = true;
-			} else if (hasClosed){
-				// closed are allowed only on top
-				return false;
-			}
-		}
-		return true;
-	}
-	
+
 	private String makeFretCell(Integer string, Integer fret, String body){
 		return "<td title=\"" + getNoteName(string, fret != null ? fret : 0) + "\" class=\"target\" string=\"" + string + "\" fret=\"" + (fret == null ? "" : String.valueOf(fret)) + "\">" + body + "</td>";
 	}

@@ -1,13 +1,10 @@
 package edu.self.servises.chord.sorter;
 
-import edu.self.servises.chord.Sorter;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class SorterComplex implements Sorter {

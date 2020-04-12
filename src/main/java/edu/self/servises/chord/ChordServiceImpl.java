@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.self.servises.chord.filter.Filter;
-import edu.self.servises.chord.sorter.SorterComplex;
+import edu.self.servises.chord.sorter.Sorter;
+import edu.self.servises.chord.sorter.SorterSimple;
 import org.springframework.stereotype.Service;
 
 import edu.self.servises.chord.filter.ClosedStringsUpPredicate;
@@ -40,7 +41,7 @@ public class ChordServiceImpl implements ChordService {
 				new MaxWidthPredicate(),
 				new ClosedStringsUpPredicate(),
 				new NaturalPredicate());
-		Sorter sorter = new SorterComplex();
+		Sorter sorter = new SorterSimple();
 		chords = filter.apply(chords);
 		return sorter.sort(chords);
 	}

@@ -1,4 +1,4 @@
-package edu.self.servises.chord;
+package edu.self.servises.chord.sorter;
 
 import java.util.List;
 
