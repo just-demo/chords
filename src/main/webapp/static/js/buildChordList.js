@@ -57,6 +57,8 @@ function buildChordList(container, chords){
                     $similar.removeClass("selected").addClass("suppressed");
                     // move to the end
                     $sortable.append($similar);
+                    // TODO: sortable does not see manual changes?
+                    refreshModified($song);
                 });
             } else {
                 similarIds.forEach(similarId => {
