@@ -39,6 +39,7 @@ function buildChordList(container, chords){
         chordFrets[chordName].length = 0;
         chordFrets[chordName].push(...frets);
         httpWriteJson("data/chords.json", chords);
+         $(".chordDefault", $chord).html(frets[0]);
     });
 
     $(document).on("mousedown", ".diagram", function(event){
@@ -57,9 +58,8 @@ function buildChordList(container, chords){
                     $similar.removeClass("selected").addClass("suppressed");
                     // move to the end
                     $sortable.append($similar);
-                    // TODO: sortable does not see manual changes?
-                    refreshModified($song);
                 });
+                refreshModified($chord);
             } else {
                 similarIds.forEach(similarId => {
                     $("#" + similarId, $sortable).removeClass("suppressed");
@@ -67,6 +67,15 @@ function buildChordList(container, chords){
             }
         }
     });
+
+    openTargetChord();
+
+    function openTargetChord() {
+        let targetChord = decodeURIComponent(window.location.hash.substr(1));
+        if (targetChord) {
+            $('[data-chord="' + targetChord + '"]').find(".listHeader").click();
+        }
+    }
 
     function getChordName($chord) {
         return $(".chordName", $chord).html();
@@ -79,15 +88,25 @@ function buildChordList(container, chords){
     function areSimilar(frets1, frets2) {
         frets1 = frets1.split("-");
         frets2 = frets2.split("-");
+        let min1 = minFret(frets1);
+        let min2 = minFret(frets2);
+        if (min1 != min2) {
+            return false;
+        }
         let length = Math.min(frets1.length, frets2.length);
         for (let i = 0; i < length; i++) {
             let fret1  = frets1[i];
             let fret2  = frets2[i];
-            if (fret1 != 0 && fret1 != "x" && fret2 != 0 && fret2 != "x" && fret1 != fret2) {
+            if (fret1 != min1 && fret1 != "x" && fret2 != min2 && fret2 != "x" && fret1 != fret2) {
                 return false;
             }
         }
         return true;
+    }
+
+    function minFret(frets) {
+        frets = frets.filter(fret => fret != "x").map(value => parseInt(value));
+        return Math.min(...frets);
     }
 
     function buildChordDiagrams(fretVariants) {
@@ -104,22 +123,21 @@ function buildChordList(container, chords){
 
     function buildChordView(chord) {
         let $chord = $([
-            "<table class='listItem'>",
+            "<table class='listItem' data-chord='", chord.name, "'>",
                 "<tr class='listHeader'>",
-                "<td>",
-                    "<span class='chordName'>", chord.name, "</span>",
-                    "<span>", chord.frets[0], "</span>",
+                    "<td>",
+                        "<span class='chordName'>", chord.name, "</span>",
+                        "<span class='chordDefault'>", chord.frets[0], "</span>",
+                    "</td>",
                 "</tr>",
-                "</td>",
                 "<tr class='listBody'>",
-                "<td>",
-                    "<div class='listActions'>",
-                        "<button type='button' class='revert' disabled>Revert</button>",
-                        "<button type='button' class='save' disabled>Save</button>",
-                    "</div>",
-                    "<div class='chordDiagrams'>",
-                    "</div>",
-                "</td>",
+                    "<td>",
+                        "<div class='listActions'>",
+                            "<button type='button' class='revert' disabled>Revert</button>",
+                            "<button type='button' class='save' disabled>Save</button>",
+                        "</div>",
+                        "<div class='chordDiagrams'></div>",
+                    "</td>",
                 "</tr>",
             "</table>"
         ].join(""));

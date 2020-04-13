@@ -203,7 +203,9 @@ function buildSongList(container, songs, chords){
     function setViewText($songView, text) {
         $songView
             .html(songTextToHTML(text))
-            .find(".chord").easyTooltip({
+            .find(".chord")
+            .on("click", function(){openChordPage($.trim($(this).html()))})
+            .easyTooltip({
                 content: function(){
                     let chordName = $.trim($(this).html());
                     let chordDiagram = chordName in chords ? buildChordDiagram(chords[chordName].frets[0]) : "Unknown<br/>chord";
@@ -317,16 +319,21 @@ function buildSongList(container, songs, chords){
         buffer.push("</table>");
         $(".songChords", $song)
             .html(buffer.join(""))
-            .find(".chord").easyTooltip({
+            .find(".chord")
+            .on("click", function(){openChordPage($.trim($(this).html()))})
+            .easyTooltip({
                 content: function(){
                     let chordName = $.trim($(this).html());
-                    console.log(chordName);
                     let chordDiagrams = chordName in chords ?
                         chords[chordName].frets.map(buildChordDiagram).join("<br/>") :
                         "Unknown<br/>chord";
                     return "<div class='chord_popup'>" + chordDiagrams + "</div>";
                 }
             });
+    }
+
+    function openChordPage(chordName) {
+        window.open("chords.html#" + encodeURIComponent(chordName), '_blank');
     }
 
     function buildChordDiagrams2(frets) {
