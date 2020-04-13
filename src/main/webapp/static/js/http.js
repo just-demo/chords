@@ -30,6 +30,16 @@ function httpWriteText(url, text){
     });
 }
 
+function httpWriteJson(url, object){
+    $.ajax({
+        url: url,
+        type: "POST",
+        async: false,
+        dataType: 'json',
+        data: JSON.stringify(object, null, 2)
+    });
+}
+
 function httpDelete(url){
     $.ajax({
         url: url,

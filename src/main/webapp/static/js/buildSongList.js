@@ -42,7 +42,7 @@ function buildSongList(container, songs, chords){
                     $song = buildSongView(song);
                     $(container).append($song);
                     $(this).dialog("close");
-                    $(".songHeader", $song).trigger("click");
+                    $(".listHeader", $song).trigger("click");
                 }
             },
             Cancel: function() {
@@ -55,12 +55,12 @@ function buildSongList(container, songs, chords){
         }
     });
 
-    $(document).on("click", ".songHeader", function(){
+    $(document).on("click", ".listHeader", function(){
         let $song = findParentSong(this);
-        let $songBody = $(".songBody", $song);
+        let $songBody = $(".listBody", $song);
         let isVisible = $songBody.is(":visible");
-        $(".songBody").hide('fast');
-        $(".song").addClass("noPrint");
+        $(".listBody").hide('fast');
+        $(".listItem").addClass("noPrint");
         if (!isVisible){
             if (!$song.data("initialized")) {
                 let performer = $(".songPerformer", $song).html();
@@ -71,16 +71,16 @@ function buildSongList(container, songs, chords){
                 $song.data("saved", text);
                 $song.data("initialized", true);
             }
-            $songBody.show('fast', $songBody[0].scrollIntoView);
+            $songBody.show('fast', () => $('html').animate({scrollTop: $song.offset().top}));
             $song.removeClass("noPrint");
         }
     });
 
-    $(document).on("mousedown", ".songHeader", function(event){
+    $(document).on("mousedown", ".listHeader", function(event){
         // middle click
         if (event.which == 2) {
             let $song = findParentSong(this);
-            let $songHeader = $(".songHeader", $song);
+            let $songHeader = $(".listHeader", $song);
             $songHeader.toggleClass("selected");
             let performer = $(".songPerformer", $song).html();
             let title = $(".songTitle", $song).html();
@@ -170,13 +170,13 @@ function buildSongList(container, songs, chords){
 
     function buildSongView(song) {
         let $song = $([
-            "<div class='song noPrint'>",
-                "<div class='songHeader ", song.selected ? "selected" : "", "'>",
+            "<div class='listItem noPrint'>",
+                "<div class='listHeader ", song.selected ? "selected" : "", "'>",
                     "<span class='songPerformer'>", song.performer, "</span>",
                     " - ",
                     "<span class='songTitle'>", song.title, "</span>",
                 "</div>",
-                "<div class='songBody'>",
+                "<div class='listBody'>",
                     "<table>",
                         "<tr class='songActions noPrint'>",
                             "<td colspan='3'>",
@@ -270,7 +270,7 @@ function buildSongList(container, songs, chords){
 
     function findParentSong(element) {
         let $element = $(element);
-        while (!$element.hasClass("song")){
+        while (!$element.hasClass("listItem")){
             $element = $element.parent();
         }
         return $element;

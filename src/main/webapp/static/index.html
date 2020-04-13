@@ -3,16 +3,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1251"/>
     <title>Songs</title>
+    <link rel="icon" href="data:;base64,=">
     <link rel="stylesheet" type="text/css" href="css/lib/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <script type="text/javascript" src="js/lib/jquery-3.4.1.js"></script>
-    <script type="text/javascript" src="js/lib/jquery-ui.js"></script>
-    <script type="text/javascript" src="js/lib/easyTooltip.js"></script>
-    <script type="text/javascript" src="js/lib/autoresize.jquery.js"></script>
-    <script type="text/javascript" src="js/buildChordDiagram.js"></script>
-    <script type="text/javascript" src="js/buildSongList.js"></script>
-    <script type="text/javascript" src="js/http.js"></script>
-    <script type="text/javascript">
+    <script src="js/lib/jquery-3.4.1.js"></script>
+    <script src="js/lib/jquery-ui.js"></script>
+    <script src="js/lib/easyTooltip.js"></script>
+    <script src="js/lib/autoresize.jquery.js"></script>
+    <script src="js/buildChordDiagram.js"></script>
+    <script src="js/buildSongList.js"></script>
+    <script src="js/http.js"></script>
+    <script>
         $(document).ready(() => {
             let timestamp = new Date().getTime();
             buildSongList(

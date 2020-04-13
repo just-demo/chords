@@ -55,15 +55,18 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         content = self.rfile.read(content_length).decode('utf8')
         url = urlparse(self.path)
-        (artist, song) = parse_url_path(unquote(url.path))
-        params = parse_qs(url.query)
-        file = build_fs_path(artist, song)
-        if 'selected' in params:
-            save_selection(artist, song, params['selected'][0].lower() == 'true')
-        elif not isfile(file):
-            save_selection(artist, song, False)
-        if content:
-            write_file(file, content)
+        if re.match("^/data/.*\\.json$", url.path):
+            write_file(url.path.strip("/"), content)
+        else:
+            (artist, song) = parse_url_path(unquote(url.path))
+            params = parse_qs(url.query)
+            file = build_fs_path(artist, song)
+            if 'selected' in params:
+                save_selection(artist, song, params['selected'][0].lower() == 'true')
+            elif not isfile(file):
+                save_selection(artist, song, False)
+            if content:
+                write_file(file, content)
         self.send_response(200)
         self.end_headers()
     def do_DELETE(self):

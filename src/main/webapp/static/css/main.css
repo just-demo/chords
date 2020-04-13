@@ -1,13 +1,17 @@
-.songHeader {
+body {
+	font-family: monospace;
+}
+
+.listHeader {
 	cursor: pointer;
 	padding: 5px;
 }
 
-.songHeader.selected {
+.selected {
 	background-color: #AFA;
 }
 
-.songHeader:hover {
+.listHeader:hover {
 	background-color: #DDD;
 }
 
@@ -16,7 +20,7 @@
 	color: blue;
 }
 
-.song {
+.listItem {
 	border: 1px solid #AAA;
 }
 
@@ -27,7 +31,6 @@
 }
 
 .songText, textarea {
-	font-family: monospace;
 	font-size: 12px;
 	line-height: 17px;
 	padding: 5px;
@@ -57,21 +60,19 @@ textarea {
 	color: blue;
 }
 
-.songBody {
+.listBody {
 	display: none;
 }
 
 .songChords td {
-	font-family: monospace;
 	vertical-align: top;
 	text-align: center;
 }
 
-.chord_popup{
+.chord_popup {
 	border: 1px solid #AAA;
 	padding: 5px;
 	background-color: #FFF;
-	font-family: monospace;
 }
 
 @media screen{
