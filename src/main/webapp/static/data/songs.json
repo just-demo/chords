@@ -1,47 +1,18 @@
 {
-  "Absynthe Minded": {
-    "Envoi": false
-  },
-  "Black": {
-    "Its A Wonderful Life": false
-  },
   "Chris De Burgh": {
     "Lady In Red": false
-  },
-  "Dido": {
-    "Thank You": false
   },
   "Eagles": {
     "Hotel California": false
   },
-  "Jason Mraz": {
-    "Life Is Wonderful": false
-  },
-  "Limp Bizkit": {
-    "Behind Blue Eyes": false
-  },
-  "Metallica": {
-    "Unforgiven": false
-  },
   "Presley Elvis": {
-    "Cant Help Falling In Love With You": false
+    "Cant Help Falling In Love With You": true
   },
   "R.E.M.": {
     "Losing My Religion": false
   },
-  "Rasmus": {
-    "October And April": false
-  },
   "Reamonn": {
     "Tonight": false
-  },
-  "Scorpions": {
-    "Moment Of Glory": false,
-    "May Be I May Be You": false,
-    "Wind Of Change": false
-  },
-  "Serj Tankian": {
-    "Empty Walls": false
   },
   "The Beatles": {
     "Yesterday": false
@@ -160,7 +131,7 @@
     "Синоптики": false
   },
   "Нотр Дам де Пари": {
-    "Эсмеральда": false
+    "Эсмеральда": true
   },
   "Океан Эльзы": {
     "Вiдпустi": false,
@@ -221,5 +192,8 @@
   },
   "Плач Єремії": {
     "Вона": false
+  },
+  "Александр Розенбаум": {
+    "Ау": true
   }
 }
