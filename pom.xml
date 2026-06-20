@@ -212,6 +212,18 @@
             <artifactId>hsqldb</artifactId>
             <version>2.4.0</version>
         </dependency>
+
+        <!-- JAXB API + runtime: removed from the JDK in Java 11+, required by Hibernate 5.3 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
